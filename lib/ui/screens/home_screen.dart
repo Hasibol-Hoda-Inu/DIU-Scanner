@@ -1,4 +1,7 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
+import 'package:image_picker/image_picker.dart';
 
 class HomeScreen extends StatefulWidget {
   static const String name = "/home-screen";
@@ -9,11 +12,16 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
+  List<XFile> _pickedImageList = [];
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         title: Text("Home Screen"),
+        actions: [
+          IconButton.filledTonal(
+              onPressed: _clearImageList,
+            icon: Icon(Icons.clear_all))],
       ),
       body: Padding(
         padding: const EdgeInsets.all(16),
@@ -21,15 +29,24 @@ class _HomeScreenState extends State<HomeScreen> {
           spacing: 12,
           children: [
             Expanded(
-              child: Container(
-                color: Colors.grey.shade200,
-                child: Center(
-                  child: Text("Template 01"),
+              child: ListView.builder(
+                itemCount: _pickedImageList.length,
+                itemBuilder: (context, index)=>Container(
+                  width: double.maxFinite,
+                  height: 300,
+                  margin: EdgeInsets.symmetric(vertical: 8),
+                  decoration: BoxDecoration(
+                      image: _pickedImageList.isNotEmpty? DecorationImage(
+                          image: FileImage(File(_pickedImageList[index].path)),
+                          fit: BoxFit.cover
+                      ) : null,
+                  ),
+                  // child: Text(_pickedImageList[index].name),
                 ),
               ),
             ),
             ElevatedButton(
-              onPressed: (){},
+              onPressed: _selectImage,
               style: ElevatedButton.styleFrom(
                 backgroundColor: Colors.grey.shade200,
                 foregroundColor: Colors.black87,
@@ -56,4 +73,26 @@ class _HomeScreenState extends State<HomeScreen> {
       ),
     );
   }
+
+  void _clearImageList(){
+    _pickedImageList.clear();
+    setState(() {});
+  }
+
+  Future<void> _selectImage()async {
+    ImagePicker _imagePicker = ImagePicker();
+    XFile? pickedImage = await _imagePicker.pickImage(source: ImageSource.gallery,);
+    if(pickedImage != null){
+      _pickedImageList.add(pickedImage);
+      setState(() {});
+    }
+  }
+
+  // List<XFile> _imageContainer(){
+  //   List<XFile> imageContainer = [];
+  //   for(int i=0; i<_pickedImageList.length; i++){
+  //     imageContainer.add(_pickedImageList[index]);
+  //   }
+  //   return imageContainer;
+  // }
 }
