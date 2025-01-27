@@ -23,9 +23,9 @@ class _HomeScreenState extends State<HomeScreen> {
               onPressed: _clearImageList,
             icon: Icon(Icons.clear_all))],
       ),
-      body: Padding(
-        padding: const EdgeInsets.all(16),
-        child: SingleChildScrollView(
+      body: SingleChildScrollView(
+        child: Padding(
+          padding: const EdgeInsets.all(16),
           child: Column(
             spacing: 12,
             children: [
@@ -131,7 +131,7 @@ class _HomeScreenState extends State<HomeScreen> {
                         )
                       ],
                     ),
-                    const SizedBox(height: 160,),
+                    const SizedBox(height:60,),
                     Text("Lecturer, Department of CSE",
                       style: TextStyle(
                           fontWeight: FontWeight.w700,
