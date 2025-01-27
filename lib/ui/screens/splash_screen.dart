@@ -31,6 +31,7 @@ class _SplashScreenState extends State<SplashScreen> {
           Expanded(
               child: Center(
                   child: Column(
+                    spacing: 16,
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       Image(image: AssetImage("assets/images/icon.png"), width: 120,),
