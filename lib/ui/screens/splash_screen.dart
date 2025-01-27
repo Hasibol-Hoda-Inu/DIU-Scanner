@@ -28,7 +28,16 @@ class _SplashScreenState extends State<SplashScreen> {
       body: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          Expanded(child: Center(child: Text("DIU Scanner", style: Theme.of(context).textTheme.titleLarge))),
+          Expanded(
+              child: Center(
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Image(image: AssetImage("assets/images/icon.png"), width: 120,),
+                      Text("DIU Scanner", 
+                          style: Theme.of(context).textTheme.titleLarge),
+                    ],
+                  ))),
           CircularProgressIndicator(),
           const SizedBox(height: 36,)
         ],
