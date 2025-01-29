@@ -293,12 +293,4 @@ class _HomeScreenState extends State<HomeScreen> {
       setState(() {});
     }
   }
-
-  // List<XFile> _imageContainer(){
-  //   List<XFile> imageContainer = [];
-  //   for(int i=0; i<_pickedImageList.length; i++){
-  //     imageContainer.add(_pickedImageList[index]);
-  //   }
-  //   return imageContainer;
-  // }
 }
