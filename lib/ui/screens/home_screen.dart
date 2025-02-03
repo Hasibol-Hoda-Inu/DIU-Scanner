@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:external_path/external_path.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:image_picker/image_picker.dart';
@@ -489,21 +490,27 @@ class _HomeScreenState extends State<HomeScreen> {
       }
 
 
-      Directory? downloadsDir;
-      try {
-        // downloadsDir = (await getExternalStorageDirectories(type: StorageDirectory.downloads))?.first;
-        downloadsDir = await getDownloadsDirectory();
-      } catch (e) {
-        throw Exception("Failed to get storage directory: $e");
-      }
+      // Directory? downloadsDir;
+      // try {
+      //   downloadsDir = await getDownloadsDirectory();
+      //
+      // } catch (e) {
+      //   throw Exception("Failed to get storage directory: $e");
+      // }
+
+      String path = await ExternalPath.getExternalStoragePublicDirectory(ExternalPath.DIRECTORY_DOWNLOADS);
+      debugPrint(path);
 
       String timestamp = DateTime.now().toIso8601String().replaceAll(":", "-");
-      String filePath = "${downloadsDir?.path}/DIUScanner_$timestamp.pdf";
+      // String filePath = "${downloadsDir?.path}/DIUScanner_$timestamp.pdf";
+      String filePath = "$path/DIUScanner_$timestamp.pdf";
+
+      debugPrint("Path : $filePath");
 
     final file = File(filePath);
     await file.writeAsBytes(await pdf.save());
 
-    debugPrint("Path : $filePath");
+
 
     if (mounted) {
       ScaffoldMessenger.of(context).showSnackBar(
@@ -532,6 +539,11 @@ class _HomeScreenState extends State<HomeScreen> {
       }
     }
 
+  }
+
+  Future<void> getPath() async {
+    var path = await ExternalPath.getExternalStoragePublicDirectory(ExternalPath.DIRECTORY_DOWNLOADS);
+    debugPrint(path);  // /storage/emulated/0/Download
   }
 
   void clearTEControllers(){
