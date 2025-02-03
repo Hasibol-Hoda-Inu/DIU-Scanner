@@ -32,7 +32,7 @@ class _HomeScreenState extends State<HomeScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text("Home Screen"),
+        title: Text("Create pdf"),
         actions: [
           IconButton.filledTonal(
               onPressed: _clearImageList,
@@ -290,7 +290,7 @@ class _HomeScreenState extends State<HomeScreen> {
                   spacing: 8,
                   children: [
                     Text("Add image", style: TextStyle(fontSize: 18),),
-                    Icon(Icons.add, color: Colors.black87, size: 24,),
+                    Icon(Icons.add_a_photo_outlined, color: Colors.black87, size: 24,),
                   ],
                 ),
             ),
@@ -333,15 +333,15 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   Future<void>makePdf()async {
-
-    try{
-      final ByteData assetData = await rootBundle.load('assets/images/logo.png');
+    try {
+      final ByteData assetData = await rootBundle.load(
+          'assets/images/logo.png');
       final Uint8List assetBytes = assetData.buffer.asUint8List();
       await _loadImagesForPdf();
 
       final pdf = p.Document();
       pdf.addPage(
-          p.Page(build: (context){
+          p.Page(build: (context) {
             return p.Column(
               children: [
                 p.Column(
@@ -408,7 +408,7 @@ class _HomeScreenState extends State<HomeScreen> {
                         p.Text(_submittedToTEController.text)
                       ],
                     ),
-                    p.SizedBox(height:60,),
+                    p.SizedBox(height: 60,),
                     p.Text("Lecturer, Department of CSE ",
                       style: p.TextStyle(
                           fontWeight: p.FontWeight.bold,
@@ -477,45 +477,49 @@ class _HomeScreenState extends State<HomeScreen> {
           })
       );
 
-      for(var imageBytes in _pdfImages){
+      for (var imageBytes in _pdfImages) {
         pdf.addPage(
-            p.Page(build: (context){
-              return  p.Center(
-                child: p.Image(p.MemoryImage(imageBytes), fit: p.BoxFit.contain),
+            p.Page(build: (context) {
+              return p.Center(
+                child: p.Image(
+                    p.MemoryImage(imageBytes), fit: p.BoxFit.contain),
               );
             })
         );
       }
 
 
-      Directory? root;
-      try{
-        root = (await getExternalStorageDirectories(type: StorageDirectory.downloads))?.first;
-      }catch(e){
+      Directory? downloadsDir;
+      try {
+        // downloadsDir = (await getExternalStorageDirectories(type: StorageDirectory.downloads))?.first;
+        downloadsDir = await getDownloadsDirectory();
+      } catch (e) {
         throw Exception("Failed to get storage directory: $e");
       }
+
       String timestamp = DateTime.now().toIso8601String().replaceAll(":", "-");
-      String filePath = "${root?.path}/DIUScanner_$timestamp.pdf";
+      String filePath = "${downloadsDir?.path}/DIUScanner_$timestamp.pdf";
 
-      final file = File(filePath);
-      await file.writeAsBytes(await pdf.save());
-      debugPrint("Path : ${filePath}");
+    final file = File(filePath);
+    await file.writeAsBytes(await pdf.save());
 
-      if(mounted){
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            backgroundColor: Colors.green,
-            content: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                const Text('PDF created successfully!'),
-                Text('Path: $filePath', style: const TextStyle(fontSize: 12)),
-              ],
-            ),
+    debugPrint("Path : $filePath");
+
+    if (mounted) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          backgroundColor: Colors.green,
+          content: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              const Text('PDF created successfully!'),
+              Text('Path: $filePath', style: const TextStyle(fontSize: 12)),
+            ],
           ),
-        );
-      }
-    }catch(e){
+        ),
+      );
+    }
+  }catch(e){
       debugPrint(e.toString());
       if(mounted){
         ScaffoldMessenger.of(context).showSnackBar(
