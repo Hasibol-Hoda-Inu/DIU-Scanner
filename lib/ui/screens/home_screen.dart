@@ -511,7 +511,6 @@ class _HomeScreenState extends State<HomeScreen> {
     await file.writeAsBytes(await pdf.save());
 
 
-
     if (mounted) {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
