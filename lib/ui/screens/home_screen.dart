@@ -489,14 +489,6 @@ class _HomeScreenState extends State<HomeScreen> {
         );
       }
 
-      // Directory? downloadsDir;
-      // try {
-      //   downloadsDir = await getDownloadsDirectory();
-      //
-      // } catch (e) {
-      //   throw Exception("Failed to get storage directory: $e");
-      // }
-
       String path = await ExternalPath.getExternalStoragePublicDirectory(ExternalPath.DIRECTORY_DOWNLOADS);
       debugPrint(path);
 
